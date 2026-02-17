@@ -5,7 +5,7 @@
 ![Disciplina](https://img.shields.io/badge/Disciplina-Refatora%C3%A7%C3%A3o_(DR4)-green?style=for-the-badge)
 
 # Gilded Rose Refactoring Kata
-## Trabalho Pratico 1 - DR4 Refatoracao
+## Teste de Performance 1 - DR4 Refatoração
 
 ![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk)
 ![Maven](https://img.shields.io/badge/Maven-3.9+-blue?logo=apachemaven)
