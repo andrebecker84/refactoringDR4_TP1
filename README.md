@@ -166,13 +166,13 @@ chmod +x run.sh && ./run.sh
 ```
 
 **Menu Interativo com Opcoes:**
-1. Testes e Cobertura (JUnit 5 + Jqwik + JaCoCo)
+1. Verificar Pre-requisitos
 2. Compilar Projeto
-3. Limpar Build
-4. Gerar JavaDoc
-5. Abrir Relatorios JaCoCo
-6. Documentacao
-7. Verificar Pre-requisitos
+3. Testes e Cobertura (JUnit 5 + Jqwik + JaCoCo)
+4. Abrir Relatorio JaCoCo
+5. Gerar JavaDoc
+6. Abrir Documentacao
+7. Limpar Build
 0. Sair
 
 ### Comandos Maven

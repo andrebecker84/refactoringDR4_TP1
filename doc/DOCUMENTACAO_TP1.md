@@ -48,21 +48,100 @@ public void updateQuality() {
 
 ### Refatoracao Intermediaria
 
-A extracao de metodos identificaria blocos como:
+O primeiro passo foi extrair metodos privados por tipo de item dentro da propria classe `GildedRose`, eliminando as condicionais aninhadas e atribuindo nomes descritivos a cada bloco de logica:
 
-- `decreaseQuality(Item)` - diminuir qualidade com verificacao de limite
-- `increaseQuality(Item)` - aumentar qualidade com verificacao de teto
-- `isExpired(Item)` - verificar se o item passou do vencimento
-- `updateSellIn(Item)` - decrementar sellIn
+```java
+public class GildedRose {
+    Item[] items;
+
+    public GildedRose(Item[] items) {
+        this.items = items;
+    }
+
+    public void updateQuality() {
+        for (Item item : items) {
+            switch (item.name) {
+                case "Aged Brie" -> updateAgedBrie(item);
+                case "Sulfuras, Hand of Ragnaros" -> updateSulfuras(item);
+                case "Backstage passes to a TAFKAL80ETC concert" -> updateBackstagePass(item);
+                default -> updateNormalItem(item);
+            }
+        }
+    }
+
+    private void updateNormalItem(Item item) {
+        decreaseQuality(item);
+        item.sellIn--;
+        if (isExpired(item)) {
+            decreaseQuality(item);
+        }
+    }
+
+    private void updateAgedBrie(Item item) {
+        increaseQuality(item);
+        item.sellIn--;
+        if (isExpired(item)) {
+            increaseQuality(item);
+        }
+    }
+
+    private void updateSulfuras(Item item) {
+        // Item lendario: nao sofre alteracoes
+    }
+
+    private void updateBackstagePass(Item item) {
+        increaseQuality(item);
+        if (item.sellIn <= 10) { increaseQuality(item); }
+        if (item.sellIn <= 5)  { increaseQuality(item); }
+        item.sellIn--;
+        if (isExpired(item)) {
+            item.quality = 0;
+        }
+    }
+
+    private void decreaseQuality(Item item) {
+        if (item.quality > 0) { item.quality--; }
+    }
+
+    private void increaseQuality(Item item) {
+        if (item.quality < 50) { item.quality++; }
+    }
+
+    private boolean isExpired(Item item) {
+        return item.sellIn < 0;
+    }
+}
+```
+
+### Metodos Extraidos
+
+Foram extraidos **sete metodos privados** com nomes autoexplicativos:
+
+| Metodo | Responsabilidade |
+|---|---|
+| `updateNormalItem(Item)` | Logica de degradacao de itens comuns |
+| `updateAgedBrie(Item)` | Logica de aumento de qualidade do Aged Brie |
+| `updateSulfuras(Item)` | Garantia de imutabilidade do item lendario |
+| `updateBackstagePass(Item)` | Logica de incremento progressivo dos backstage passes |
+| `decreaseQuality(Item)` | Diminuir qualidade com verificacao de limite inferior (0) |
+| `increaseQuality(Item)` | Aumentar qualidade com verificacao de teto (50) |
+| `isExpired(Item)` | Verificar se o item passou do vencimento |
+
+### Bad Smells Eliminados
+
+- **Condicionais aninhadas**: O `switch` no `updateQuality()` substitui a cadeia de `if/else` com 4+ niveis de profundidade
+- **Duplicacao**: As verificacoes `quality > 0` e `quality < 50` foram centralizadas em `decreaseQuality()` e `increaseQuality()`
+- **Metodo longo**: O metodo original de ~45 linhas foi decomposto em metodos coesos de 3-7 linhas cada
 
 ### Principios Aplicados
 
-- **DRY (Don't Repeat Yourself)**: Logica de verificacao de limites centralizada
-- **SRP (parcial)**: Cada metodo extraido tem uma responsabilidade clara, mas a classe ainda concentra todos os tipos
+- **DRY (Don't Repeat Yourself)**: Logica de verificacao de limites centralizada em `decreaseQuality()` e `increaseQuality()`
+- **SRP (parcial)**: Cada metodo extraido tem uma responsabilidade clara, mas a classe ainda concentra todos os tipos de item — limitacao resolvida no Exercicio 2
+- **Clean Code**: Nomes descritivos eliminam a necessidade de comentarios; cada metodo e curto e objetivo
 
 ### Resultado
 
-Esta etapa serviu como base para o Exercicio 2, onde os metodos extraidos sao reorganizados em classes separadas (updaters).
+Esta etapa eliminou os bad smells mais criticos (condicionais aninhadas, duplicacao, metodo longo) e serviu como base para o Exercicio 2, onde os metodos extraidos sao reorganizados em classes separadas (updaters), completando a separacao de responsabilidades.
 
 ---
 
@@ -321,3 +400,14 @@ A refatoracao transformou um metodo monolitico com alta complexidade ciclomatica
 - **Testavel**: Cada componente pode ser testado isoladamente
 - **Legivel**: O fluxo principal (`GildedRose.updateQuality()`) tem apenas 4 linhas
 - **Robusto**: 26 testes deterministicos + 5 propriedades Jqwik garantem a corretude
+
+---
+
+## Referencias
+
+- MARTIN, Robert C. *Clean Code: A Handbook of Agile Software Craftsmanship*. 2nd Edition. Prentice Hall, 2008.
+- FOWLER, Martin. *Refactoring: Improving the Design of Existing Code*. 2nd Edition. Addison-Wesley, 2018.
+- BACHE, Emily. [Gilded Rose Refactoring Kata](https://github.com/emilybache/GildedRose-Refactoring-Kata). GitHub.
+- GAMMA, Erich et al. *Design Patterns: Elements of Reusable Object-Oriented Software*. Addison-Wesley, 1994.
+- [JUnit 5 User Guide](https://junit.org/junit5/docs/current/user-guide/). junit.org.
+- [Jqwik User Guide](https://jqwik.net/docs/current/user-guide.html). jqwik.net.

@@ -1,430 +1,151 @@
 #!/bin/bash
 
-# ===============================================
-#   Gilded Rose Refactoring Kata - Menu
-#   DR4 TP1 - Modern CLI Interface with Colors
-# ===============================================
-
-# ═══════════════════════════════════════════════════════════════
-#   Aura Theme Color Palette - RGB ANSI Codes
-# ═══════════════════════════════════════════════════════════════
-# Purple colors
-PURPLE='\033[38;2;162;119;255m'
-PURPLE_BOLD='\033[1;38;2;162;119;255m'
-PURPLE_DARK_SOFT='\033[38;2;132;100;198m'
-PURPLE_DARK='\033[38;2;61;55;94m'
-PURPLE_DARK_PLUS='\033[38;2;41;38;60m'
-
-# Green colors
-GREEN='\033[38;2;97;255;202m'
-GREEN2='\033[38;2;84;197;159m'
-GREEN_BOLD='\033[1;38;2;97;255;202m'
-GREEN_DARK_SOFT='\033[38;2;42;99;80m'
-
-# Orange colors
-ORANGE='\033[38;2;255;202;133m'
-ORANGE_BOLD='\033[1;38;2;255;202;133m'
-ORANGE_DARK_SOFT='\033[38;2;199;160;111m'
-
-# Pink colors
-PINK='\033[38;2;246;148;255m'
-PINK_BOLD='\033[1;38;2;246;148;255m'
-PINK_DARK_SOFT='\033[38;2;193;122;200m'
-
-# Blue colors
-BLUE='\033[38;2;130;226;255m'
-BLUE_BOLD='\033[1;38;2;130;226;255m'
-BLUE_DARK_SOFT='\033[38;2;108;178;199m'
-
-# Red colors
-RED='\033[38;2;255;103;103m'
-RED_BOLD='\033[1;38;2;255;103;103m'
-RED_DARK_SOFT='\033[38;2;197;88;88m'
-
-# Neutral colors
-WHITE='\033[38;2;237;236;238m'
-WHITE_BOLD='\033[1;38;2;237;236;238m'
-WHITE_DARK_SOFT='\033[38;2;189;189;189m'
-GRAY='\033[38;2;109;109;109m'
-GRAY_BOLD='\033[1;38;2;109;109;109m'
-BLACK='\033[38;2;21;20;27m'
-
-# Reset
-RESET='\033[0m'
-
-# Funcao para truncar diretorio
-get_truncated_path() {
-    local max_len=60
-    local current_path="$PWD"
-    local path_len=${#current_path}
-
-    if [ $path_len -le $max_len ]; then
-        echo "$current_path"
-    else
-        echo "...${current_path: -$max_len}"
-    fi
-}
-
 menu() {
     clear
-    local truncated_path=$(get_truncated_path)
     echo ""
-    echo -e "${GREEN2}╭─── Gilded Rose Kata ${GRAY}· v1.0.0 ·${GREEN2} by Andre L. Becker © 2026${RESET}${GREEN2} ─────────────────────────────────────────────╮${RESET}"
-    echo -e "${GREEN2}│                                                                 ${RESET}${GREEN_DARK_SOFT}│ ${GREEN}Refatoracao DR4 - TP1${RESET}                 ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│                ${WHITE}Gilded Rose Refactoring Kata                     ${RESET}${GREEN_DARK_SOFT}│  ${WHITE}· Strategy + Factory Pattern${RESET}        ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│                                                                 ${RESET}${GREEN_DARK_SOFT}│  ${WHITE}· Principios SOLID${RESET}                  ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│ ${RESET} ${GREEN2}                       ╔════════════════╗                       ${RESET}${GREEN_DARK_SOFT}│ ────────────────────────────────────${RESET} ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│ ${RESET} ${GREEN2}                  ╔════╣  GILDED  ROSE  ╠════╗                  ${RESET}${GREEN_DARK_SOFT}│ ${GREEN2}Opcoes Disponiveis:${RESET}                  ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│ ${RESET} ${GREEN2}                  ║    ╚════════════════╝    ║                  ${RESET}${GREEN_DARK_SOFT}│                                      ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│ ${RESET} ${GREEN2}                  ║    Quality  Assurance    ║                  ${RESET}${GREEN_DARK_SOFT}│ ${WHITE_BOLD} 1 ${RESET} ${GRAY}→  🧪   Testes e Cobertura        ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│ ${RESET} ${GREEN2}                  ║    Refactoring  Kata    ║                  ${RESET}${GREEN_DARK_SOFT}│ ${WHITE_BOLD} 2 ${RESET} ${GRAY}→  📦   Compilar Projeto          ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│ ${RESET} ${GREEN2}                  ╚═══════════════════════╝                  ${RESET}${GREEN_DARK_SOFT}│ ${WHITE_BOLD} 3 ${RESET} ${GRAY}→${PINK_DARK_SOFT}   ⌫  Limpar Build${RESET}              ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│                                                                 ${RESET}${GREEN_DARK_SOFT}│ ${WHITE_BOLD} 4 ${RESET} ${GRAY}→  📚   Gerar JavaDoc             ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│                                                                 ${RESET}${GREEN_DARK_SOFT}│ ${WHITE_BOLD} 5 ${RESET} ${GRAY}→  📊   Abrir Relatorios JaCoCo   ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│                                                                 ${RESET}${GREEN_DARK_SOFT}│ ${WHITE_BOLD} 6 ${RESET} ${GRAY}→  📖   Documentacao              ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│${GRAY}                   Refactoring Kata - DR4 TP1                    ${RESET}${GREEN_DARK_SOFT}│ ${WHITE_BOLD} 7 ${RESET} ${GRAY}→${BLUE}   ✔  Verificar Sistema${RESET}         ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│${GRAY}                  Java 21 · Maven 3.9+ · JUnit 5                 ${RESET}${GREEN_DARK_SOFT}│ ${RED} 0 ${RESET} ${GRAY}→${RED}   ✖  Sair${RESET}                      ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│${PURPLE_DARK_SOFT} ${truncated_path} ${RESET}${GREEN_DARK_SOFT}│                                      ${GREEN2}│"
-    echo -e "${GREEN2}╰────────────────────────────────────────────────────────────────────────────────────────────────────────╯${RESET}"
+    echo "  ========================================"
+    echo "   Gilded Rose Refactoring Kata - DR4 TP1"
+    echo "   Java 21 · Maven · JUnit 5 · Jqwik"
+    echo "  ========================================"
     echo ""
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-    echo -e "${BLACK} 💬  Digite o numero da opcao desejada${RESET}"
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-    echo -ne "${GREEN_BOLD} ⌨ ↳ ${WHITE}" && read -r opcao
-    echo -e "${RESET}"
+    echo "   1 - Verificar Pre-requisitos"
+    echo "   2 - Compilar Projeto"
+    echo "   3 - Testes e Cobertura (JaCoCo)"
+    echo "   4 - Abrir Relatorio JaCoCo"
+    echo "   5 - Gerar JavaDoc"
+    echo "   6 - Abrir Documentacao"
+    echo "   7 - Limpar Build"
+    echo "   0 - Sair"
+    echo ""
+    read -rp "  Opcao: " opcao
 
     case $opcao in
-        1) executar_testes ;;
+        1) prereq ;;
         2) compilar ;;
-        3) limpar ;;
-        4) javadoc ;;
-        5) abrir_relatorio ;;
-        6) abrir_docs ;;
-        7) verificar_prereq ;;
-        0) sair ;;
-        *)
-            echo ""
-            echo -e "  ⚠️  Opcao invalida! Tente novamente..."
-            sleep 2
-            menu
-            ;;
+        3) testes ;;
+        4) relatorio ;;
+        5) javadoc ;;
+        6) docs ;;
+        7) limpar ;;
+        0) echo "" && echo "  Encerrando." && echo "" && exit 0 ;;
+        *) echo "" && echo "  Opcao invalida." && sleep 2 && menu ;;
     esac
 }
 
-verificar_prereq() {
-    clear
-    echo ""
-    echo -e "${GREEN2}╭─── Verificando Pre-requisitos ─────────────────────────────────────────────────────────────────────────╮${RESET}"
-    echo -e "${GREEN2}│                                                                                                        │${RESET}"
-    echo -e "${GREEN2}│   🩺  Checando ambiente de desenvolvimento...                                                           │${RESET}"
-    echo -e "${GREEN2}│                                                                                                        │${RESET}"
-    echo -e "${GREEN2}╰────────────────────────────────────────────────────────────────────────────────────────────────────────╯${RESET}"
-    echo ""
-
-    if command -v java &> /dev/null; then
-        echo -e "  ✅ Java encontrado:"
-        java -version 2>&1 | head -1 | sed "s/^/     /"
+abrir() {
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        open "$1"
+    elif command -v xdg-open &>/dev/null; then
+        xdg-open "$1" 2>/dev/null
+    elif command -v wslview &>/dev/null; then
+        wslview "$1"
     else
-        echo -e "  ❌ Java NAO encontrado!"
-        echo -e "     Baixe em: https://adoptium.net/"
+        echo "  Abra manualmente: $1"
     fi
-    echo ""
-
-    if command -v mvn &> /dev/null; then
-        echo -e "  ✅ Maven encontrado:"
-        mvn -version 2>&1 | head -1 | sed "s/^/     /"
-    else
-        echo -e "  ❌ Maven NAO encontrado!"
-        echo -e "     Baixe em: https://maven.apache.org/download.cgi"
-    fi
-    echo ""
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-    read -r -p "Pressione ENTER para voltar..."
-    menu
 }
 
-executar_testes() {
+prereq() {
     clear
     echo ""
-    echo -e "${GREEN2}╭─── Executando Testes com Cobertura ────────────────────────────────────────────────────────────────────╮${RESET}"
-    echo -e "${GREEN2}│                                                                                                        │${RESET}"
-    echo -e "${GREEN2}│   ⌛  Executando suite JUnit 5 + Jqwik com analise de cobertura JaCoCo...                               │${RESET}"
-    echo -e "${GREEN2}│                                                                                                        │${RESET}"
-    echo -e "${GREEN2}╰────────────────────────────────────────────────────────────────────────────────────────────────────────╯${RESET}"
+    echo "  --- Verificando Pre-requisitos ---"
     echo ""
-
-    if ! command -v mvn &> /dev/null; then
-        echo -e "  ❌ [ERRO] Maven nao encontrado!"
-        echo ""
-        echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-        read -r -p "Pressione ENTER para voltar..."
-        menu
-        return
+    if command -v java &>/dev/null; then
+        echo "  [OK] Java:"
+        java -version 2>&1 | head -1 | sed 's/^/       /'
+    else
+        echo "  [X] Java nao encontrado. Baixe em: https://adoptium.net/"
     fi
-
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-    echo -e "${BLACK}  🧹  Limpando builds anteriores...${RESET}"
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
     echo ""
-    mvn clean -q
-
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-    echo -e "${BLACK}  🧪  Executando testes com cobertura JaCoCo...${RESET}"
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
+    if command -v mvn &>/dev/null; then
+        echo "  [OK] Maven:"
+        mvn -version 2>&1 | head -1 | sed 's/^/       /'
+    else
+        echo "  [X] Maven nao encontrado. Baixe em: https://maven.apache.org/download.cgi"
+    fi
     echo ""
-    mvn test
+    read -rp "  Pressione ENTER para voltar..." && menu
+}
 
+testes() {
+    clear
     echo ""
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-    echo -e "${BLACK}  📊  Gerando relatorio de cobertura...${RESET}"
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
+    echo "  --- Executando Testes com Cobertura ---"
+    echo ""
+    mvn clean test
+    echo ""
+    echo "  --- Gerando Relatorio JaCoCo ---"
     echo ""
     mvn jacoco:report
-
     if [ -f "target/site/jacoco/index.html" ]; then
         echo ""
-        echo -e "  ✅ [SUCESSO] Relatorio de cobertura gerado!"
-        echo ""
-        echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-        read -r -p "  Deseja abrir o relatorio agora? (S/N): " abrir
-        if [[ $abrir =~ ^[Ss]$ ]]; then
-            if [[ "$OSTYPE" == "darwin"* ]]; then
-                open target/site/jacoco/index.html
-            elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-                xdg-open target/site/jacoco/index.html 2>/dev/null || \
-                firefox target/site/jacoco/index.html 2>/dev/null || \
-                google-chrome target/site/jacoco/index.html 2>/dev/null
-            fi
-        fi
+        echo "  Relatorio gerado em: target/site/jacoco/index.html"
     fi
-
     echo ""
-    read -r -p "Pressione ENTER para voltar..."
-    menu
+    read -rp "  Pressione ENTER para voltar..." && menu
 }
 
 compilar() {
     clear
     echo ""
-    echo -e "${GREEN2}╭─── Compilando Projeto ─────────────────────────────────────────────────────────────────────────────────╮${RESET}"
-    echo -e "${GREEN2}│                                                                                                        │${RESET}"
-    echo -e "${GREEN2}│   ⌛  Compilando codigo-fonte e gerando artefatos...                                                    │${RESET}"
-    echo -e "${GREEN2}│                                                                                                        │${RESET}"
-    echo -e "${GREEN2}╰────────────────────────────────────────────────────────────────────────────────────────────────────────╯${RESET}"
+    echo "  --- Compilando Projeto ---"
     echo ""
-
-    if ! command -v mvn &> /dev/null; then
-        echo -e "  ❌ [ERRO] Maven nao encontrado!"
-        echo ""
-        echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-        read -r -p "Pressione ENTER para voltar..."
-        menu
-        return
-    fi
-
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-    echo -e "${BLACK}  📦  Compilando o projeto...${RESET}"
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-    echo ""
-    mvn clean compile
-
-    echo ""
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-    echo -e "${BLACK}  📦  Empacotando JAR...${RESET}"
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-    echo ""
-    mvn package -DskipTests
-
+    mvn clean package -DskipTests
     if [ -f "target/gilded-rose-refactoring-1.0.0.jar" ]; then
         echo ""
-        echo -e "  ✅ [SUCESSO] JAR gerado em: target/gilded-rose-refactoring-1.0.0.jar"
+        echo "  JAR gerado em: target/gilded-rose-refactoring-1.0.0.jar"
     fi
-
     echo ""
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-    read -r -p "Pressione ENTER para voltar..."
-    menu
+    read -rp "  Pressione ENTER para voltar..." && menu
 }
 
 limpar() {
     clear
     echo ""
-    echo -e "${GREEN2}╭─── Limpando Build ─────────────────────────────────────────────────────────────────────────────────────╮${RESET}"
-    echo -e "${GREEN2}│                                                                                                        │${RESET}"
-    echo -e "${GREEN2}│   ⌛  Removendo artefatos de compilacao e build...                                                      │${RESET}"
-    echo -e "${GREEN2}│                                                                                                        │${RESET}"
-    echo -e "${GREEN2}╰────────────────────────────────────────────────────────────────────────────────────────────────────────╯${RESET}"
-    echo ""
-
-    if ! command -v mvn &> /dev/null; then
-        echo -e "  ❌ [ERRO] Maven nao encontrado!"
-        echo ""
-        echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-        read -r -p "Pressione ENTER para voltar..."
-        menu
-        return
-    fi
-
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-    echo -e "${BLACK}  🧹  Removendo artefatos de build...${RESET}"
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
+    echo "  --- Limpando Build ---"
     echo ""
     mvn clean
-
     echo ""
-    echo -e "  ✅ [SUCESSO] Build limpo!"
-    echo ""
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-    read -r -p "Pressione ENTER para voltar..."
-    menu
+    read -rp "  Pressione ENTER para voltar..." && menu
 }
 
 javadoc() {
     clear
     echo ""
-    echo -e "${GREEN2}╭─── Gerando Documentacao JavaDoc ───────────────────────────────────────────────────────────────────────╮${RESET}"
-    echo -e "${GREEN2}│                                                                                                        │${RESET}"
-    echo -e "${GREEN2}│   ✏️  Gerando documentacao tecnica do codigo...                                                         │${RESET}"
-    echo -e "${GREEN2}│                                                                                                        │${RESET}"
-    echo -e "${GREEN2}╰────────────────────────────────────────────────────────────────────────────────────────────────────────╯${RESET}"
-    echo ""
-
-    if ! command -v mvn &> /dev/null; then
-        echo -e "  ❌ [ERRO] Maven nao encontrado!"
-        echo ""
-        echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-        read -r -p "Pressione ENTER para voltar..."
-        menu
-        return
-    fi
-
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-    echo -e "${BLACK}  📚  Gerando JavaDoc...${RESET}"
-    echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
+    echo "  --- Gerando JavaDoc ---"
     echo ""
     mvn javadoc:javadoc
-
     if [ -f "target/site/apidocs/index.html" ]; then
         echo ""
-        echo -e "  ✅ [SUCESSO] JavaDoc gerado!"
-        echo ""
-        echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-        read -r -p "  Deseja abrir a documentacao? (S/N): " abrir
-        if [[ $abrir =~ ^[Ss]$ ]]; then
-            if [[ "$OSTYPE" == "darwin"* ]]; then
-                open target/site/apidocs/index.html
-            elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-                xdg-open target/site/apidocs/index.html 2>/dev/null
-            fi
-        fi
-    else
-        echo ""
-        echo -e "  ⚠️  [AVISO] JavaDoc nao foi gerado completamente."
-        echo ""
-        echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
+        echo "  JavaDoc gerado em: target/site/apidocs/index.html"
     fi
-
     echo ""
-    read -r -p "Pressione ENTER para voltar..."
-    menu
+    read -rp "  Pressione ENTER para voltar..." && menu
 }
 
-abrir_relatorio() {
+relatorio() {
     clear
     echo ""
-    echo -e "${GREEN2}╭─── Abrindo Relatorio de Cobertura ─────────────────────────────────────────────────────────────────────╮${RESET}"
-    echo -e "${GREEN2}│                                                                                                        │${RESET}"
-    echo -e "${GREEN2}│   🌐  Abrindo relatorio JaCoCo no navegador...                                                          │${RESET}"
-    echo -e "${GREEN2}│                                                                                                        │${RESET}"
-    echo -e "${GREEN2}╰────────────────────────────────────────────────────────────────────────────────────────────────────────╯${RESET}"
-    echo ""
-
     if [ -f "target/site/jacoco/index.html" ]; then
-        echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-        echo -e "${BLACK}  📊 Abrindo relatorio...${RESET}"
-        echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-        echo ""
-        read -r -p "  Deseja abrir o relatorio agora? (S/N): " abrir
-
-        if [[ ${abrir:0:1} =~ ^[Ss]$ ]]; then
-            if [[ "$OSTYPE" == "darwin"* ]]; then
-                open target/site/jacoco/index.html
-            elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-                xdg-open target/site/jacoco/index.html 2>/dev/null
-            fi
-            echo ""
-            echo -e "✅ [SUCESSO] Relatorio de cobertura aberto!"
-            echo ""
-            echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-        fi
-
-        echo ""
-        read -r -p "Pressione ENTER para voltar..."
+        echo "  Abrindo relatorio JaCoCo..."
+        abrir "target/site/jacoco/index.html"
     else
-        echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-        echo -e "${BLACK}  ❌ [ERRO] Relatorio nao encontrado!${RESET}"
-        echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-        echo ""
-        echo -e " ${ORANGE_DARK_SOFT}⚠️  Execute testes primeiro... ${WHITE}Favor escolha opcao ${GREEN}1${GRAY}.${RESET}"
-        echo ""
-        echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-        read -r -p "Pressione ENTER para voltar..."
+        echo "  Relatorio nao encontrado. Execute os testes primeiro (opcao 3)."
     fi
-
-    menu
+    echo ""
+    read -rp "  Pressione ENTER para voltar..." && menu
 }
 
-abrir_docs() {
+docs() {
     clear
     echo ""
-    echo -e "${GREEN2}╭─── Abrindo Documentacao ───────────────────────────────────────────────────────────────────────────────╮${RESET}"
-    echo -e "${GREEN2}│                                                                                                        │${RESET}"
-    echo -e "${GREEN2}│   ⌛  Abrindo documentacao completa do Trabalho Pratico 1...                                            │${RESET}"
-    echo -e "${GREEN2}│                                                                                                        │${RESET}"
-    echo -e "${GREEN2}╰────────────────────────────────────────────────────────────────────────────────────────────────────────╯${RESET}"
-    echo ""
-
     if [ -f "doc/DOCUMENTACAO_TP1.md" ]; then
-        echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-        echo -e "${BLACK}  📖  Abrindo doc/DOCUMENTACAO_TP1.md...${RESET}"
-        echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-        if [[ "$OSTYPE" == "darwin"* ]]; then
-            open doc/DOCUMENTACAO_TP1.md
-        elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-            xdg-open doc/DOCUMENTACAO_TP1.md 2>/dev/null
-        fi
-        echo ""
-        echo -e "  ✅ [SUCESSO] Documentacao aberta!"
-        echo ""
-        read -r -p "Pressione ENTER para voltar..."
+        echo "  Abrindo documentacao..."
+        abrir "doc/DOCUMENTACAO_TP1.md"
     else
-        echo -e "  ❌ [ERRO] Arquivo doc/DOCUMENTACAO_TP1.md nao encontrado!"
-        echo ""
-        echo -e "${PURPLE_DARK}──────────────────────────────────────────────────────────────────────────────────────────────────────────${RESET}"
-        read -r -p "Pressione ENTER para voltar..."
+        echo "  Arquivo doc/DOCUMENTACAO_TP1.md nao encontrado."
     fi
-
-    menu
+    echo ""
+    read -rp "  Pressione ENTER para voltar..." && menu
 }
 
-sair() {
-    clear
-    echo ""
-    echo -e "${GREEN2}╭─── Gilded Rose Kata ${GRAY}· Refatoracao DR4 ·${GREEN2} by Andre L. Becker © 2026 ────────────────────────────────────╮${RESET}"
-    echo -e "${GREEN2}│                                                                                                       ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│                           ${GREEN}                     ▅      ${GRAY}▖${RESET} ${WHITE_BOLD}Ate logo!${RESET}                                      ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│                           ${GREEN}                  ▗▛███▜▖ ${GRAY}▖▘${RESET}                                                ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│                           ${GREEN}                ▜  █▄▄▄█                                                    ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│                           ${GREEN}                ▝▝▜█████▉▛▃                                                 ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│                           ${GREEN2}                    ▀██▀ ${GREEN} ▀                                                 ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│                           ${GRAY}                 ▖ ${BLUE_DARK_SOFT}▗▞▚▘ ${GRAY} ▗▞▚▘${RESET}                                               ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│                                                                                                       ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}│                                👋  ${WHITE}Obrigado por usar o sistema !${RESET}                                       ${GREEN2}│${RESET}"
-    echo -e "${GREEN2}╰───────────────────────────────────────────────────────────────────────────────────────────────────────╯${RESET}"
-    echo ""
-    sleep 2
-    exit 0
-}
-
-# Inicio do script
 menu
