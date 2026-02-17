@@ -36,3 +36,9 @@ desktop.ini
 
 # Logs
 *.log
+
+# Claude
+.claude/
+
+# Jqwik
+.jqwik-database
